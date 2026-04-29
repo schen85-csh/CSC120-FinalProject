@@ -1,17 +1,11 @@
-Library:
-Rows of bookshelves stand in silence, and the air is thick with the smell of old books. The scent here is chaotic enough that it might hide the presence of the living. Behind the tall shelves, there are good places to stay out of sight.
+Library : Rows of bookshelves stand in silence, and the air is thick with the smell of old books. The scent here is chaotic enough that it might hide the presence of the living. Behind the tall shelves, there are good places to stay out of sight.
 
-PERoom:
-The spacious P.E. room feels strangely empty. A few baseball bats lie scattered across the floor, and in the corner are several bows and a quiver of arrows left behind. There may be something here worth using to defend yourself.
+PERoom : The spacious P.E. room feels strangely empty. A few baseball bats lie scattered across the floor, and in the corner are several bows and a quiver of arrows left behind. There may be something here worth using to defend yourself.
 
-Storeroom:
-This room is packed with the school's stored supplies. The shelves still hold energy drinks and food, and several heavy fire extinguishers stand nearby. In one corner, a staircase leads upward into the dark.
+Storeroom : This room is packed with the school's stored supplies. The shelves still hold energy drinks and food, and several heavy fire extinguishers stand nearby. In one corner, a staircase leads upward into the dark.
 
-BroadcastRoom:
-A low hum still lingers in the broadcast room. One button on the control panel remains lit, as if waiting for someone to press it. A single sound might be enough to draw the noise-sensitive zombies toward the speakers on every floor. While they are distracted, it could be the perfect chance to make a run for the rooftop.
+BroadcastRoom : A low hum still lingers in the broadcast room. One button on the control panel remains lit, as if waiting for someone to press it. A single sound might be enough to draw the noise-sensitive zombies toward the speakers on every floor. While they are distracted, it could be the perfect chance to make a run for the rooftop.
 
-MedicalRoom:
-A faint smell of disinfectant hangs in the air. Some medicine, antiseptic, and bandages still remain in the cabinets. If used well, this place might help you hold on to life a little longer.
+MedicalRoom : A faint smell of disinfectant hangs in the air. Some medicine, antiseptic, and bandages still remain in the cabinets. If used well, this place might help you hold on to life a little longer.
 
-ScienceRoom:
-The lab tables are covered with bottles and glassware, and the lingering smell in the room is unsettling. Some of the chemicals still look dangerous. One wrong move could end badly, but they may also be able to harm the zombies.
+ScienceRoom : The lab tables are covered with bottles and glassware, and the lingering smell in the room is unsettling. Some of the chemicals still look dangerous. One wrong move could end badly, but they may also be able to harm the zombies.

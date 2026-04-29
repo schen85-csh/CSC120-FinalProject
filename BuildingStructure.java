@@ -15,9 +15,7 @@ public class BuildingStructure{
         this.setUpExits();
    }
 
-   /**
-    * 
-    */
+   
    private void loadRooms(String fileName){
     try {
         File file = new File(fileName);
@@ -43,7 +41,7 @@ public class BuildingStructure{
             }
         }
         scanner.close();
-        System.out.println("Finish loading the map!" + rooms.size() + "rooms have been created!");
+        System.out.println("Finish loading the map!" + rooms.size() + " rooms have been created!");
     } catch (Exception e) {
         System.err.println("Error: Cannot find the map!" + fileName);
     }
