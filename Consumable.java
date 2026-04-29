@@ -10,4 +10,16 @@ public class Consumable extends Item {
         this.healAmount = healAmount;
         this.speedBoost = speedBoost;
     }
+
+    public String getType(){
+        return this.type;
+    }
+
+    public int getHealAmount(){
+        return this.healAmount;
+    }
+
+    public int getSpeedBoost(){
+        return this.speedBoost;
+    }
 }

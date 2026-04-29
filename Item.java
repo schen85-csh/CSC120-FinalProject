@@ -12,7 +12,7 @@ public class Item {
     }
 
     public String getName(){
-        return this.name + ": " + this.description;
+        return this.name;
     }
 
     public boolean isCanPick(){
@@ -28,3 +28,4 @@ public class Item {
     }
 
 }
+

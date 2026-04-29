@@ -16,6 +16,10 @@ public class Room {
         this.zombies = new ArrayList<>();
     }
 
+    public List<Item> getItems() {
+        return this.items;
+    }
+
     public void setExit(String direction, Room neighbor){
         exits.put(direction, neighbor);
     }
@@ -28,14 +32,20 @@ public class Room {
         items.add(item);
     }
 
-    public Item removeItem(String itemName){
-        for (Item i:items){
-            if(i.getName().contains(itemName)){
-                items.remove(i);
-                return i;
+    public Item removeItem(String itemName) {
+        Item foundItem = null;
+        for (Item i : items) {
+    
+            if (i.getName().equalsIgnoreCase(itemName)) {
+                foundItem = i;
+                break; 
             }
         }
-        return null;
+        
+        if (foundItem != null) {
+            items.remove(foundItem); 
+        }
+        return foundItem;
     }
 
     public String getDescription(){
