@@ -9,3 +9,5 @@ BroadcastRoom : A low hum still lingers in the broadcast room. One button on the
 MedicalRoom : A faint smell of disinfectant hangs in the air. Some medicine, antiseptic, and bandages still remain in the cabinets. If used well, this place might help you hold on to life a little longer.
 
 ScienceRoom : The lab tables are covered with bottles and glassware, and the lingering smell in the room is unsettling. Some of the chemicals still look dangerous. One wrong move could end badly, but they may also be able to harm the zombies.
+
+Rooftop : The cold night air hits your face as you push open the heavy door. From here, you can see the entire school shrouded in darkness, with the distant groans of zombies echoing below. A rescue helicopter's spotlight flickers in the distance—this is your only way out.

@@ -6,4 +6,4 @@ StoreRoom : Protain Bars : Protein bars that can help quickly replenish nutrient
 MedicalRoom : Iodine : Iodine that can be use to clean the wound : Item : 10 : false
 MedicalRoom : Bandage : Bandage can stop bleeding : Item : 10 : false
 BroadcastRoom : Broadcasting equipment : The noise made by the equipment can hurt zombies' hearing : Weapon : 10 : false
-SciencRoom : concentrated sulfuric acid : a chemical that can hurt zombies a lot : Weapon : 30 : false
+ScienceRoom : concentrated sulfuric acid : a chemical that can hurt zombies a lot : Weapon : 30 : false

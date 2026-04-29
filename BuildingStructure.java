@@ -132,9 +132,9 @@ private void loadItems(String fileName) {
 
         //connect science class room and the roof
         //The roof is on the third floor and there is a stair in the science classroom that will lead players to the roof.
-        if (scienceRoom != null && rooftop != null){
-            scienceRoom.setExit("up", rooftop);
-            rooftop.setExit("down", scienceRoom);
+        if (scienceRoom != null && rooftop != null) {
+            scienceRoom.setExit("up", rooftop);    
+            rooftop.setExit("down", scienceRoom); 
         }
         this.currentRoom = library;
    }
