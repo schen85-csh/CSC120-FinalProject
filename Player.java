@@ -10,7 +10,8 @@ public class Player {
     private BuildingStructure campus;
 
 
-    public Player(){
+    public Player(BuildingStructure campus){
+       this.campus = campus;
        this.lifebar = 100;
        this.speed = 10;
        this.inventory = new ArrayList<>();

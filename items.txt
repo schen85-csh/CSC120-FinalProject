@@ -2,7 +2,7 @@ PERoom : Baseball Bat : A metalline bat : Weapon : 5 : false
 PERoom : Bow and Arrow : sharp arrows and perfect bow : Weapon : 10 : false
 Library : Big Bookshelf : A heavy wooden bookshelf : Static : 0 : true
 StoreRoom : Energy Drink : A canned drink : Drink : 10 : false
-StoreRoom : Protain Bars : Protein bars that can help quickly replenish nutrients : 15 : false
+StoreRoom : Protain Bars : Protein bars that can help quickly replenish nutrients : Food : 15 : false
 MedicalRoom : Iodine : Iodine that can be use to clean the wound : Item : 10 : false
 MedicalRoom : Bandage : Bandage can stop bleeding : Item : 10 : false
 BroadcastRoom : Broadcasting equipment : The noise made by the equipment can hurt zombies' hearing : Weapon : 10 : false

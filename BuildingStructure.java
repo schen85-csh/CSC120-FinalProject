@@ -11,7 +11,7 @@ public class BuildingStructure{
    public BuildingStructure(){
         this.rooms = new HashMap<>();
         this.loadRooms("roomDescription.txt");
-        this.loadItems(items.txt);
+        this.loadItems("items.txt");
         this.setUpExits();
    }
 
@@ -41,9 +41,9 @@ public class BuildingStructure{
                 Room newRoom = new Room(name, description);
                 rooms.put(name, newRoom);
             }
-            scanner.close();
-            System.out.println("Finish loading the map!" + rooms.size() + "rooms have been created!");
         }
+        scanner.close();
+        System.out.println("Finish loading the map!" + rooms.size() + "rooms have been created!");
     } catch (Exception e) {
         System.err.println("Error: Cannot find the map!" + fileName);
     }
