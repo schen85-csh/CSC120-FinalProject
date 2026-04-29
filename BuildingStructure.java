@@ -11,6 +11,7 @@ public class BuildingStructure{
    public BuildingStructure(){
         this.rooms = new HashMap<>();
         this.loadRooms("roomDescription.txt");
+        this.loadItems(items.txt);
         this.setUpExits();
    }
 
@@ -47,6 +48,50 @@ public class BuildingStructure{
         System.err.println("Error: Cannot find the map!" + fileName);
     }
    }
+
+  
+private void loadItems(String fileName) {
+    try {
+        File file = new File(fileName);
+        Scanner scanner = new Scanner(file);
+
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+        
+            String[] parts = line.split(":");
+
+            if (parts.length >= 6) {
+                String roomName = parts[0].trim();
+                String itemName = parts[1].trim();
+                String itemDesc = parts[2].trim();
+                String type = parts[3].trim();
+                int value = Integer.parseInt(parts[4].trim()); // 将数值转为整数
+                boolean canHide = Boolean.parseBoolean(parts[5].trim()); // 转为布尔值
+
+                
+                Room targetRoom = rooms.get(roomName);
+
+                if (targetRoom != null) {
+                    if (type.equalsIgnoreCase("Weapon")) {
+                        targetRoom.addItem(new Weapon(itemName, itemDesc, value));
+                    } else if (type.equalsIgnoreCase("Food") || type.equalsIgnoreCase("Drink")) {
+                        
+                        int heal = type.equalsIgnoreCase("Food") ? value : 0;
+                        int speed = type.equalsIgnoreCase("Drink") ? value : 0;
+                        targetRoom.addItem(new Consumable(itemName, itemDesc, type, heal, speed));
+                    } else {
+                        
+                        targetRoom.addItem(new Item(itemName, itemDesc, true, canHide));
+                    }
+                }
+            }
+        }
+        scanner.close();
+        System.out.println("Items loaded successfully!");
+    } catch (Exception e) {
+        System.err.println("Error loading items: " + e.getMessage());
+    }
+}
 
    private void setUpExits(){
         //pick the rooms from the variable "rooms"
