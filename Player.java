@@ -69,12 +69,13 @@ public class Player {
         }
     }
 
-    public void attack(Zombie z, String part){
-        //the initial damage
-        int damage = 10;
-        System.out.println("You attack zombie's" + part +"!");
-        z.takeDamage(damage, part);
+    public void attack(Zombie zombie, Weapon weapon) {
+    if (weapon.getName().equalsIgnoreCase("Broadcasting equipment")) {
+        zombie.takeSpecificDamage(weapon.getDamage(), "ears");
+    } else {
+        zombie.takeRandomDamage(weapon.getDamage());
     }
+}
 
     public int getLifebar(){
         return lifebar;
