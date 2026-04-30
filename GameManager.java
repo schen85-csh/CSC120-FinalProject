@@ -33,116 +33,137 @@ public class GameManager {
         while (isRunning) {
             System.out.print("\n> ");
             String fullCommand = input.nextLine().trim();
-            if (fullCommand.isEmpty()) continue;
-
-            //use split to divide player's words into action and argument
-            String[] parts = fullCommand.split(" ", 2);
-
-            //pick the first part and change it into lower case
-            String action = parts[0].toLowerCase();
             
-            //set a String variable
-            String argument;
-            if (parts.length > 1) {
-                argument = parts[1];
-            } else {
-                argument = "";
-            }
-
-            //call processCommand 
-            processCommand(action, argument);
+            if (fullCommand.isEmpty()) continue;
+            processCommand(fullCommand); 
+            
         }
 
         System.out.println("Thanks for playing!");
         input.close();
     }
 
-    private void processCommand(String action, String argument) {
-        //use ignore case here to make the process more convinient
-        if (action.equalsIgnoreCase("help")) {
-            System.out.println("Commands: go [west, east, up, down], take [item], use [item], hide, quit, attack[head, torso, limbs, ears]");
+    private void processCommand(String commandLine) {
+        String line = commandLine.toLowerCase().trim();
+
+        if (line.equals("help")) {
+            System.out.println("Commands: go [dir], take [item], use [item], attack [part]");
+            System.out.println("Advanced: use [weapon] to attack [part]");
         } 
-        else if (action.equalsIgnoreCase("go")) {
-            player.move(argument);
-            checkWinCondition();
-        } 
-        else if (action.equalsIgnoreCase("take")) {
-            player.pickUp(argument);
-        } 
-        else if (action.equalsIgnoreCase("use")) {
-            useItemFromInventory(argument);
-        } 
-        else if (action.equalsIgnoreCase("attack")) {
-            handleAttack(argument);
-        }
-        else if (action.equalsIgnoreCase("hide")) {
+        else if (line.equals("hide")) {
             player.hide();
         } 
-        else if (action.equalsIgnoreCase("quit")) {
+        else if (line.equals("quit")) {
             isRunning = false;
+        } 
+        // 优先处理长指令
+        else if (line.startsWith("use") && line.contains("to attack")) {
+            String weaponName = line.substring(3, line.indexOf("to attack")).trim();
+            int attackIndex = line.indexOf("to attack") + 9;
+            String part = (line.length() > attackIndex) ? line.substring(attackIndex).trim() : "";
+        
+            if (weaponName.isEmpty()) {
+                System.out.println("What do you want to use to attack?");
+            } else {
+                handleAttack(weaponName, part);
+            }
+        }
+        else if (line.startsWith("go ")) {
+            player.move(line.substring(3).trim());
+            checkWinCondition();
+        }
+        else if (line.startsWith("take ")) {
+            player.pickUp(line.substring(5).trim());
+        }
+        else if (line.startsWith("attack")) {
+            // 改进点：安全获取部位
+            String part = line.contains(" ") ? line.substring(line.indexOf(" ")).trim() : "";
+            handleAttack(null, part);
+        }
+        else if (line.startsWith("use ")) {
+            String itemName = line.substring(4).trim();
+            Item item = findItemInInventory(itemName);
+
+            if (item == null) {
+                System.out.println("You don't have '" + itemName + "' in your inventory.");
+            } else if (item instanceof Consumable) {
+                player.use(item); 
+                System.out.println(item.getUseFeedback());
+                System.out.println(">> Lifebar: " + player.getLifebar());
+            } else if (item instanceof Weapon) {
+                System.out.println("To use " + itemName + ", try: 'use " + itemName + " to attack [part]'");
+            } else {
+                System.out.println("You can't use this item like that.");
+            }
         } 
         else {
             System.out.println("I don't understand that command.");
         }
     }
 
-    private void handleAttack(String part) {
+    private void handleAttack(String weaponName, String part) {
         Room currentRoom = campus.getCurrentRoom();
         List<Zombie> zombies = currentRoom.getZombies();
 
-        //check if there is zombie in the room
+        // 1. 检查是否有丧尸
         if (zombies.isEmpty()) {
-            System.out.println("You swing your weapon at the empty air. There are no zombies here!");
+            System.out.println("There are no zombies here to attack!");
             return;
         }
-
-        Weapon equippedWeapon = player.getCurrentWeapon();
-        //the basic damage value
-        int finalDamage = 10;
-        String weaponName = "bare hands";
-
-        if (equippedWeapon != null){
-            finalDamage = equippedWeapon.getDamage();
-            weaponName = equippedWeapon.getName();
-            System.out.println(equippedWeapon.getUseFeedback());
-        }else{
-            System.out.println("You are not holding a weapon! You punch with your bare hands...");
-        }
-
         Zombie target = zombies.get(0);
 
-        //attack zombies' ear when player use the broadcasting equipment
-        if (equippedWeapon != null && equippedWeapon.getName().equalsIgnoreCase("Broadcasting equipment")) {
-            System.out.println("The high-frequency noise targets the zombie's hearing!");
-            target.takeSpecificDamage(finalDamage, "ears"); 
+        // 2. 确定伤害和武器反馈
+        int finalDamage = 10; // 默认空手伤害
+        Weapon selectedWeapon = null;
+
+        if (weaponName != null && !weaponName.isEmpty()) {
+            // 在背包里找指定的武器
+            Item item = findItemInInventory(weaponName);
+            if (item instanceof Weapon) {
+                selectedWeapon = (Weapon) item;
+                finalDamage = selectedWeapon.getDamage();
+                System.out.println(selectedWeapon.getUseFeedback());
+            } else {
+                System.out.println("You don't have '" + weaponName + "' or it's not a weapon. Using bare hands!");
+            }
         } else {
-            //attack zombies based on player's instruction or randomly
-            System.out.println("Dealing damage to "+ target.getName() + "'s " + (part.isEmpty()? "body" : part) + "...");
-            if (part == null || part.isEmpty()){
+            System.out.println("You punch with your bare hands...");
+        }
+
+        // 3. 执行攻击逻辑
+        // 特殊处理：广播设备自动打耳朵
+        if (selectedWeapon != null && selectedWeapon.getName().equalsIgnoreCase("Broadcasting equipment")) {
+            System.out.println("The high-frequency noise targets the zombie's hearing!");
+            target.takeSpecificDamage(finalDamage, "ears");
+        } 
+        // 普通处理：指定部位或随机
+        else {
+            if (part == null || part.isEmpty()) {
                 target.takeRandomDamage(finalDamage);
             } else {
                 target.takeSpecificDamage(finalDamage, part);
             }
         }
 
-        System.out.println(">> Damage dealt: " + finalDamage);
-        System.out.println(">> "+ target.getName()+"health remaining: "+target.getHealth());
+        // 4. 显示伤害结果 (注意：具体的伤害值建议在 Zombie 类里打印，这里保持同步)
+        System.out.println(">> Final Damage: " + finalDamage);
+        System.out.println(">> " + target.getName() + " health: " + target.getHealth());
 
-        if (target.isAlive()){
+        // 5. 丧尸反击与死亡检查
+        if (target.isAlive()) {
             int zDamage = target.getAttackPower();
             player.takeDamage(zDamage);
 
-            if(!player.isAlive()){
+            if (!player.isAlive()) {
                 System.out.println("***********************************");
                 System.out.println("GAME OVER! You were eaten by zombies.");
                 System.out.println("***********************************");
                 this.isRunning = false;
             }
-        }else{
+        } else {
             currentRoom.removeZombie(target);
-            System.out.println("The area is now safe... for now.");
+            System.out.println("The " + target.getName() + " is defeated! The room is safe.");
         }
-
     }
    
     private void checkWinCondition() {
@@ -168,33 +189,13 @@ public class GameManager {
     }
 
     //pick player's words and match the word item with the object item
-    private void useItemFromInventory(String itemName) {
-        Item itemToUse = null;
+    private Item findItemInInventory(String itemName) {
         for (Item i : player.getInventory()) {
             if (i.getName().equalsIgnoreCase(itemName)) {
-                itemToUse = i;
-                break;
+                return i;
             }
         }
-        if (itemToUse != null) {
-            int valueUsed = 0;
-            if (itemToUse instanceof Weapon){
-                Weapon w = (Weapon) itemToUse;
-                player.setCurrentWeapon(w);
-                valueUsed = w.getDamage();
-                System.out.println(itemToUse.getUseFeedback());
-                System.out.println(">> Weapon Damage: " + valueUsed);
-            }else if (itemToUse instanceof Consumable){
-                Consumable c = (Consumable) itemToUse;
-                valueUsed = c.getHealAmount();
-                player.use(itemToUse);
-                System.out.println(itemToUse.getUseFeedback());
-                System.out.println(">> Lifebar recovered: +" + valueUsed + " | Current Lifebar: " + player.getLifebar()) ;
-            }
-            
-        } else {
-            System.out.println("You don't have '" + itemName + "' in your inventory.");
-        }
+        return null;
     }
 
     public static void main(String[] args) {
