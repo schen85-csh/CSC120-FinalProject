@@ -44,23 +44,41 @@ public class GameManager {
     }
 
     private void processCommand(String commandLine) {
+        // 1. 预处理：统一转小写并去首尾空格
         String line = commandLine.toLowerCase().trim();
+        if (line.isEmpty()) return;
 
+        // 2. 处理单单词指令
         if (line.equals("help")) {
-            System.out.println("Commands: go [dir], take [item], use [item], attack [part]");
+            System.out.println("--- Available Commands ---");
+            System.out.println("Basic: go [direction], take [item], hide, quit");
+            System.out.println("Use: use [item] (for food/drinks)");
+            System.out.println("Attack: attack [part] (bare hands)");
             System.out.println("Advanced: use [weapon] to attack [part]");
+            return;
         } 
-        else if (line.equals("hide")) {
+    
+        if (line.equals("hide")) {
             player.hide();
+            return;
         } 
-        else if (line.equals("quit")) {
+    
+        if (line.equals("quit")) {
             isRunning = false;
-        } 
-        // 优先处理长指令
-        else if (line.startsWith("use") && line.contains("to attack")) {
+            return;
+        }
+
+        // 3. 处理组合指令：use [weapon] to attack [part]
+        if (line.startsWith("use") && line.contains("to attack")) {
+         // 提取 "use " 之后到 " to attack" 之前的部分
             String weaponName = line.substring(3, line.indexOf("to attack")).trim();
+        
+            // 提取 "to attack " 之后的部分
             int attackIndex = line.indexOf("to attack") + 9;
-            String part = (line.length() > attackIndex) ? line.substring(attackIndex).trim() : "";
+            String part = "";
+            if (line.length() > attackIndex) {
+                part = line.substring(attackIndex).trim();
+            }
         
             if (weaponName.isEmpty()) {
                 System.out.println("What do you want to use to attack?");
@@ -68,36 +86,60 @@ public class GameManager {
                 handleAttack(weaponName, part);
             }
         }
+
+        // 4. 处理单纯的攻击：attack [part] 或 attack
+        else if (line.startsWith("attack")) {
+            String part = "";
+            // 如果输入中包含空格，说明后面跟着部位名
+            if (line.contains(" ")) {
+                part = line.substring(line.indexOf(" ")).trim();
+            }
+            handleAttack(null, part); // 第一个参数为 null 表示空手
+        }
+
+        // 5. 处理移动：go [direction]
         else if (line.startsWith("go ")) {
-            player.move(line.substring(3).trim());
+            String direction = line.substring(3).trim();
+            player.move(direction);
             checkWinCondition();
         }
+
+        // 6. 处理拾取：take [item]
         else if (line.startsWith("take ")) {
-            player.pickUp(line.substring(5).trim());
+            String itemName = line.substring(5).trim();
+            player.pickUp(itemName);
         }
-        else if (line.startsWith("attack")) {
-            // 改进点：安全获取部位
-            String part = line.contains(" ") ? line.substring(line.indexOf(" ")).trim() : "";
-            handleAttack(null, part);
-        }
+
+        // 7. 处理单纯的使用：use [item] (针对 bandage/food 等)
         else if (line.startsWith("use ")) {
             String itemName = line.substring(4).trim();
             Item item = findItemInInventory(itemName);
 
             if (item == null) {
                 System.out.println("You don't have '" + itemName + "' in your inventory.");
-            } else if (item instanceof Consumable) {
-                player.use(item); 
+            } 
+            else if (item instanceof Consumable) {
+                // 执行恢复逻辑
+                Consumable c = (Consumable) item;
+                int healAmount = c.getHealAmount();
+            
+                player.use(item); // 调用 Player 的使用逻辑处理数值
+            
                 System.out.println(item.getUseFeedback());
-                System.out.println(">> Lifebar: " + player.getLifebar());
-            } else if (item instanceof Weapon) {
-                System.out.println("To use " + itemName + ", try: 'use " + itemName + " to attack [part]'");
-            } else {
-                System.out.println("You can't use this item like that.");
+                System.out.println(">> HP recovered: +" + healAmount + " | Current HP: " + player.getLifebar());
+            } 
+            else if (item instanceof Weapon) {
+                // 引导玩家使用组合指令
+                System.out.println("To use " + item.getName() + " in combat, try: 'use " + item.getName() + " to attack [part]'");
+            } 
+            else {
+                System.out.println("This item cannot be used this way.");
             }
         } 
+    
+        // 8. 兜底逻辑
         else {
-            System.out.println("I don't understand that command.");
+            System.out.println("I don't understand that command. Type 'help' for tips.");
         }
     }
 
