@@ -28,6 +28,10 @@ public class Zombie {
         double multiplier = bodyParts.getOrDefault(part.toLowerCase(), 1.0);
         int finalDamage = (int) (baseDamage * multiplier);
         this.health -= finalDamage;
+
+        if (this.health<0){
+            this.health = 0;
+        }
         
         System.out.println(name + "'s' " + part + " is attacked! Cause a " + finalDamage + " points damage");
         checkStatus();
@@ -49,7 +53,7 @@ public class Zombie {
         if (health <= 0) {
             System.out.println(name + " falls! You made it!");
         } else {
-            System.out.println(name + " still has" + health + " bloods!");
+            System.out.println(name + " still has " + health + " bloods!");
         }
     }
 

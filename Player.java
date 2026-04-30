@@ -21,7 +21,7 @@ public class Player {
         if (this.lifebar < 0) {
             this.lifebar = 0;
         }
-        System.out.println("OHCH! The zombie attacks you ! You lost " + amount + "lifebar.");
+        System.out.println("OHCH! The zombie attacks you ! You lost " + amount + " lifebar.");
         System.out.println("Current Lifebar: " + this.lifebar);
     }
 
