@@ -217,12 +217,6 @@ public class GameManager {
             System.out.println("\n==================================================");
             System.out.println("🎉 CONGRATULATIONS! YOU MADE IT TO THE ROOFTOP! ");
             System.out.println("==================================================");
-            System.out.println("The cold night air hits your face as you push open the door.");
-            System.out.println("In the distance, the spotlight of a rescue helicopter");
-            System.out.println("cuts through the dark sky and begins its descent.");
-            System.out.println("You take one last look at the silent, infested campus...");
-            System.out.println("You have survived the nightmare!");
-            System.out.println("==================================================");
             System.out.println("MISSION ACCOMPLISHED! Thanks for playing.");
             
             // Terminate the game loop

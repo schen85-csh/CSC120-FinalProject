@@ -2,7 +2,7 @@ PERoom : Baseball Bat : A metalline bat : Weapon : 30 : false : You swing the ba
 PERoom : Bow and Arrow : sharp arrows and perfect bow : Weapon : 40 : false : You shot an arrow and hit the zombie!
 Library : Big Bookshelf : A heavy wooden bookshelf : Static : 0 : true : It is a very wise place to hide
 Storeroom : Energy Drink : A canned drink : Drink : 10 : false : You chug the drink. You feel a bit more refreshed!
-Storeroom : Protain Bars : Protein bars that can help quickly replenish nutrients : Food : 15 : false : You ate the bar. Your energy levels are rising.
+Storeroom : Protein Bar : Protein bars that can help quickly replenish nutrients : Food : 15 : false : You ate the bar. Your energy levels are rising.
 MedicalRoom : Iodine : Iodine that can be use to clean the wound : Food : 10 : false : You applied the iodine. It stings, but you feel better.
 MedicalRoom : Bandage : Bandage can stop bleeding : Food : 10 : false : You wrapped the bandage tightly around your wound.
 BroadcastRoom : Broadcasting equipment : The noise made by the equipment can hurt zombies' hearing : Weapon : 30 : false : The equipment screeches with high-frequency noise! Zombies ears are bleeding!
