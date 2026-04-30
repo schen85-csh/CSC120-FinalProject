@@ -3,11 +3,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 public class BuildingStructure{
-
+    //attributes
     private Map<String, Room> rooms;
     private Room currentRoom;
     private Room startRoom;
 
+    //constructor
    public BuildingStructure(){
         this.rooms = new HashMap<>();
         this.loadRooms("roomDescription.txt");
@@ -16,7 +17,10 @@ public class BuildingStructure{
         this.setUpExits();
    }
 
-   
+   /**
+    * This method load the rooms base on the roomDescription.txt file.
+    * @param fileName
+    */
    private void loadRooms(String fileName){
     try {
         File file = new File(fileName);
@@ -48,7 +52,10 @@ public class BuildingStructure{
     }
    }
 
-  
+    /**
+     * This method load the items in the rooms base on the items.txt file.
+     * @param fileName
+     */
     private void loadItems(String fileName) {
     try {
         File file = new File(fileName);
@@ -59,6 +66,7 @@ public class BuildingStructure{
         
             String[] parts = line.split(":");
 
+            //pick each element in each line and name them
             if (parts.length >= 7) {
                 String roomName = parts[0].trim();
                 String itemName = parts[1].trim();
@@ -70,7 +78,7 @@ public class BuildingStructure{
 
                 
                 Room targetRoom = rooms.get(roomName);
-
+                //check the type of the items and add them into the room
                 if (targetRoom != null) {
                     if (type.equalsIgnoreCase("Weapon")) {
                         targetRoom.addItem(new Weapon(itemName, itemDesc, type, value, feedback));
@@ -91,6 +99,10 @@ public class BuildingStructure{
     }
     }
 
+    /**
+     * This method loads all the zombies in each room base on the zombieList.txt file
+     * @param fileName
+     */
     private void loadZombies(String fileName) {
     try {
         File file = new File(fileName);
@@ -100,6 +112,7 @@ public class BuildingStructure{
             String line = scanner.nextLine().trim();
             if (line.isEmpty()) continue;
 
+            //pick each element from each line and name them
             String[] parts = line.split(":"); 
             if (parts.length >= 4) {
                 String roomName = parts[0].trim();
@@ -107,6 +120,7 @@ public class BuildingStructure{
                 int health = Integer.parseInt(parts[2].trim());
                 int attack = Integer.parseInt(parts[3].trim());
 
+                //place the zombies into their rooms
                 Room targetRoom = rooms.get(roomName);
                 if (targetRoom != null) {
                     
@@ -119,7 +133,9 @@ public class BuildingStructure{
         System.out.println("Error loading zombies: " + e.getMessage());
     }
 }
-
+    /**
+     * This method onnect the rooms together(build the path between the rooms).
+     */
     private void setUpExits(){
         //pick the rooms from the variable "rooms"
         Room library = rooms.get("Library");
@@ -168,6 +184,7 @@ public class BuildingStructure{
         this.currentRoom = library;
    }
 
+   //getter
    public Room getCurrentRoom(){
         return currentRoom;
    }

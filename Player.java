@@ -2,20 +2,23 @@
 import java.util.ArrayList;
 import java.util.List;
 public class Player {
-    
+    //attributes
     private String name;
     private int lifebar;
     private List<Item> inventory;
     private BuildingStructure campus;
     private Weapon currentWeapon;
 
-
+    //constructor
     public Player(BuildingStructure campus){
        this.campus = campus;
        this.lifebar = 100;
        this.inventory = new ArrayList<>();
     }
-
+    /**
+     * This method deals with the player's lifebar after player is attacked by the zombie and prints the information.
+     * @param amount
+     */
     public void takeDamage(int amount){
         this.lifebar -= amount;
         if (this.lifebar < 0) {
@@ -25,10 +28,11 @@ public class Player {
         System.out.println("Current Lifebar: " + this.lifebar);
     }
 
-    public boolean isAlive(){
-        return this.lifebar > 0;
-    }
-
+    
+    /**
+     * This method allows players to move around and also prints information as hints.
+     * @param direction
+     */
     public void move(String direction){
         boolean success = campus.movePlayer(direction);
         if(success){
@@ -49,6 +53,11 @@ public class Player {
         }
     }
 
+    /**
+     * This mathod check if there's the item in the room and print information to tell player that if they successfully pick up the item.
+     * if the player can pick the item, the item will be added into the inventory.
+     * @param itemName
+     */
     public void pickUp(String itemName){
         Room currentRoom = campus.getCurrentRoom();
         Item item = currentRoom.removeItem(itemName);
@@ -60,6 +69,10 @@ public class Player {
         }
     }
 
+    /**
+     * This method check if the item is consumable and then modify player's lifebar.
+     * @param item
+     */
     public void use(Item item){
         if (item instanceof Consumable){
             Consumable c = (Consumable) item;
@@ -67,7 +80,10 @@ public class Player {
             inventory.remove(item);
         }
     }
-    
+
+    /**
+     * This method check the current room to see if there's somewhere to hide and prints information to tell player if they hide successfully.
+     */
     public void hide(){
         Room currentRoom = campus.getCurrentRoom();
         boolean canHideHere = false;
@@ -84,7 +100,10 @@ public class Player {
         }
     }
 
-
+    //getter and setter
+    public boolean isAlive(){
+        return this.lifebar > 0;
+    }
     public void setCurrentWeapon(Weapon weapon){
         this.currentWeapon = weapon;
     }

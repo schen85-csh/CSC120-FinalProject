@@ -1,4 +1,5 @@
 public class Item {
+    //attributes
     private String name;
     private String description;
     private boolean canHide;
@@ -6,6 +7,7 @@ public class Item {
     private String type;
     private String useFeedback;
 
+    //constructor
     public Item(String name, String description, String type, boolean canPick, boolean canHide, String useFeedback){
         this.name = name;
         this.description = description;
@@ -15,6 +17,7 @@ public class Item {
         this.useFeedback = useFeedback;
     }
     
+    //getters
     public String getUseFeedback(){
         return useFeedback;
     }

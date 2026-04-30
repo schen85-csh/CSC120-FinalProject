@@ -2,10 +2,12 @@ import java.util.List;
 import java.util.Scanner;
 
 public class GameManager {
+    // attributes
     private BuildingStructure campus;
     private Player player;
     private boolean isRunning;
 
+    //constructor
     public GameManager() {
         
         this.campus = new BuildingStructure();
@@ -43,12 +45,16 @@ public class GameManager {
         input.close();
     }
 
+    /**
+     * This method will deal with the command that is given by player
+     * @param commandLine
+     */
     private void processCommand(String commandLine) {
-        // 1. 预处理：统一转小写并去首尾空格
+        // change all into lower case and delete the space
         String line = commandLine.toLowerCase().trim();
         if (line.isEmpty()) return;
 
-        // 2. 处理单单词指令
+        // set up all the commands according to the verbs
         if (line.equals("help")) {
             System.out.println("--- Available Commands ---");
             System.out.println("Basic: go [direction], take [item], hide, quit \n    for command go, players can enter up, down, left, right");
@@ -68,12 +74,12 @@ public class GameManager {
             return;
         }
 
-        // 3. 处理组合指令：use [weapon] to attack [part]
+        // set up the complex command (use and attack)
         if (line.startsWith("use") && line.contains("to attack")) {
-         // 提取 "use " 之后到 " to attack" 之前的部分
+            // pick the part after "use" and before "to attack"
             String weaponName = line.substring(3, line.indexOf("to attack")).trim();
         
-            // 提取 "to attack " 之后的部分
+            // pick the part after "to attack"
             int attackIndex = line.indexOf("to attack") + 9;
             String part = "";
             if (line.length() > attackIndex) {
@@ -87,30 +93,30 @@ public class GameManager {
             }
         }
 
-        // 4. 处理单纯的攻击：attack [part] 或 attack
+        // attack [part] or attack
         else if (line.startsWith("attack")) {
             String part = "";
-            // 如果输入中包含空格，说明后面跟着部位名
+            // if there's a space, there is a [part]
             if (line.contains(" ")) {
                 part = line.substring(line.indexOf(" ")).trim();
             }
-            handleAttack(null, part); // 第一个参数为 null 表示空手
+            handleAttack(null, part); //null means bare hands
         }
 
-        // 5. 处理移动：go [direction]
+        // go [direction]
         else if (line.startsWith("go ")) {
             String direction = line.substring(3).trim();
             player.move(direction);
             checkWinCondition();
         }
 
-        // 6. 处理拾取：take [item]
+        //take [item]
         else if (line.startsWith("take ")) {
             String itemName = line.substring(5).trim();
             player.pickUp(itemName);
         }
 
-        // 7. 处理单纯的使用：use [item] (针对 bandage/food 等)
+        // use [item] 
         else if (line.startsWith("use ")) {
             String itemName = line.substring(4).trim();
             Item item = findItemInInventory(itemName);
@@ -119,17 +125,17 @@ public class GameManager {
                 System.out.println("You don't have '" + itemName + "' in your inventory.");
             } 
             else if (item instanceof Consumable) {
-                // 执行恢复逻辑
+                
                 Consumable c = (Consumable) item;
                 int healAmount = c.getHealAmount();
             
-                player.use(item); // 调用 Player 的使用逻辑处理数值
+                player.use(item); 
             
                 System.out.println(item.getUseFeedback());
                 System.out.println(">> HP recovered: +" + healAmount + " | Current HP: " + player.getLifebar());
             } 
             else if (item instanceof Weapon) {
-                // 引导玩家使用组合指令
+                // give the instruction about how to give correct command
                 System.out.println("To use " + item.getName() + " in combat, try: 'use " + item.getName() + " to attack [part]'");
             } 
             else {
@@ -137,29 +143,33 @@ public class GameManager {
             }
         } 
     
-        // 8. 兜底逻辑
+        
         else {
             System.out.println("I don't understand that command. Type 'help' for tips.");
         }
     }
-
+    /**
+     * This method will deal with condition that player use weapon to attack.
+     * @param weaponName
+     * @param part
+     */
     private void handleAttack(String weaponName, String part) {
         Room currentRoom = campus.getCurrentRoom();
         List<Zombie> zombies = currentRoom.getZombies();
 
-        // 1. 检查是否有丧尸
+        // check if there is zombie
         if (zombies.isEmpty()) {
             System.out.println("There are no zombies here to attack!");
             return;
         }
         Zombie target = zombies.get(0);
 
-        // 2. 确定伤害和武器反馈
-        int finalDamage = 10; // 默认空手伤害
+        
+        int finalDamage = 10; // the damage value of bare hands
         Weapon selectedWeapon = null;
 
         if (weaponName != null && !weaponName.isEmpty()) {
-            // 在背包里找指定的武器
+        
             Item item = findItemInInventory(weaponName);
             if (item instanceof Weapon) {
                 selectedWeapon = (Weapon) item;
@@ -172,13 +182,13 @@ public class GameManager {
             System.out.println("You punch with your bare hands...");
         }
 
-        // 3. 执行攻击逻辑
-        // 特殊处理：广播设备自动打耳朵
+
+        // broadcasting equipment-> hurt ears
         if (selectedWeapon != null && selectedWeapon.getName().equalsIgnoreCase("Broadcasting equipment")) {
             System.out.println("The high-frequency noise targets the zombie's hearing!");
             target.takeSpecificDamage(finalDamage, "ears");
         } 
-        // 普通处理：指定部位或随机
+        
         else {
             if (part == null || part.isEmpty()) {
                 target.takeRandomDamage(finalDamage);
@@ -187,11 +197,11 @@ public class GameManager {
             }
         }
 
-        // 4. 显示伤害结果 (注意：具体的伤害值建议在 Zombie 类里打印，这里保持同步)
+        // shows the result
         System.out.println(">> Final Damage: " + finalDamage);
         System.out.println(">> " + target.getName() + " health: " + target.getHealth());
 
-        // 5. 丧尸反击与死亡检查
+        // zombie attack back and check if zombie or player is dead
         if (target.isAlive()) {
             int zDamage = target.getAttackPower();
             player.takeDamage(zDamage);
@@ -207,7 +217,10 @@ public class GameManager {
             System.out.println("The " + target.getName() + " is defeated! The room is safe.");
         }
     }
-   
+
+    /**
+     * This method check if the player reach the terminal.
+     */
     private void checkWinCondition() {
         // Get the current room name
         String currentRoomName = campus.getCurrentRoom().getName();
@@ -224,7 +237,11 @@ public class GameManager {
         }
     }
 
-    //pick player's words and match the word item with the object item
+    /**
+     * This method matches the word item with the object item
+     * @param itemName
+     * @return
+     */
     private Item findItemInInventory(String itemName) {
         for (Item i : player.getInventory()) {
             if (i.getName().equalsIgnoreCase(itemName)) {
