@@ -12,6 +12,7 @@ public class BuildingStructure{
         this.rooms = new HashMap<>();
         this.loadRooms("roomDescription.txt");
         this.loadItems("items.txt");
+        this.loadZombies("zombieList.txt");
         this.setUpExits();
    }
 
@@ -48,7 +49,7 @@ public class BuildingStructure{
    }
 
   
-private void loadItems(String fileName) {
+    private void loadItems(String fileName) {
     try {
         File file = new File(fileName);
         Scanner scanner = new Scanner(file);
@@ -58,28 +59,27 @@ private void loadItems(String fileName) {
         
             String[] parts = line.split(":");
 
-            if (parts.length >= 6) {
+            if (parts.length >= 7) {
                 String roomName = parts[0].trim();
                 String itemName = parts[1].trim();
                 String itemDesc = parts[2].trim();
                 String type = parts[3].trim();
-                int value = Integer.parseInt(parts[4].trim()); // 将数值转为整数
-                boolean canHide = Boolean.parseBoolean(parts[5].trim()); // 转为布尔值
+                int value = Integer.parseInt(parts[4].trim());
+                boolean canHide = Boolean.parseBoolean(parts[5].trim());
+                String feedback = parts[6].trim();
 
                 
                 Room targetRoom = rooms.get(roomName);
 
                 if (targetRoom != null) {
                     if (type.equalsIgnoreCase("Weapon")) {
-                        targetRoom.addItem(new Weapon(itemName, itemDesc, value));
+                        targetRoom.addItem(new Weapon(itemName, itemDesc, type, value, feedback));
                     } else if (type.equalsIgnoreCase("Food") || type.equalsIgnoreCase("Drink")) {
-                        
-                        int heal = type.equalsIgnoreCase("Food") ? value : 0;
-                        int speed = type.equalsIgnoreCase("Drink") ? value : 0;
-                        targetRoom.addItem(new Consumable(itemName, itemDesc, type, heal, speed));
+                        int heal = value;
+                        targetRoom.addItem(new Consumable(itemName, itemDesc, type, heal, feedback));
                     } else {
                         
-                        targetRoom.addItem(new Item(itemName, itemDesc, true, canHide));
+                        targetRoom.addItem(new Item(itemName, itemDesc, type, true, canHide, feedback));
                     }
                 }
             }
@@ -89,9 +89,37 @@ private void loadItems(String fileName) {
     } catch (Exception e) {
         System.err.println("Error loading items: " + e.getMessage());
     }
+    }
+
+    private void loadZombies(String fileName) {
+    try {
+        File file = new File(fileName);
+        Scanner scanner = new Scanner(file);
+
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine().trim();
+            if (line.isEmpty()) continue;
+
+            String[] parts = line.split(":"); 
+            if (parts.length >= 3) {
+                String roomName = parts[0].trim();
+                String zombieName = parts[1].trim();
+                int health = Integer.parseInt(parts[2].trim());
+
+                Room targetRoom = rooms.get(roomName);
+                if (targetRoom != null) {
+                    
+                    targetRoom.addZombie(new Zombie(zombieName, health));
+                }
+            }
+        }
+        scanner.close();
+    } catch (Exception e) {
+        System.out.println("Error loading zombies: " + e.getMessage());
+    }
 }
 
-   private void setUpExits(){
+    private void setUpExits(){
         //pick the rooms from the variable "rooms"
         Room library = rooms.get("Library");
         Room peRoom = rooms.get("PERoom");

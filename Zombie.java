@@ -26,6 +26,8 @@ public class Zombie {
         
         System.out.println(name + "'s' " + part + " is attacked! Cause a " + finalDamage + " points damage");
         checkStatus();
+        System.out.println(">> Damage dealt: " + finalDamage);
+        System.out.println(">> " + name + " health remaining: " + health);
     }
 
     
@@ -46,10 +48,14 @@ public class Zombie {
         }
     }
 
-    
+    public String getName(){
+        return name;
+    }
+
     public int getHealth() {
          return health; 
     }
+
     public boolean isAlive() {
          return health > 0; 
     }

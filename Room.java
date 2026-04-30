@@ -48,6 +48,18 @@ public class Room {
         return foundItem;
     }
 
+    public void addZombie(Zombie zombie) {
+        this.zombies.add(zombie);
+    }
+
+    public void removeZombie(Zombie zombie){
+        this.zombies.remove(zombie);
+    }
+
+    public List<Zombie> getZombies() {
+        return this.zombies;
+    }
+
     public String getDescription(){
         return "Location: " + "[" + name + "]" + "\n" + description; 
     }

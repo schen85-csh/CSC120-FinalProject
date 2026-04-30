@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Scanner;
 
 public class GameManager {
@@ -59,7 +60,7 @@ public class GameManager {
     private void processCommand(String action, String argument) {
         //use ignore case here to make the process more convinient
         if (action.equalsIgnoreCase("help")) {
-            System.out.println("Commands: go [direction], take [item], use [item], hide, quit");
+            System.out.println("Commands: go [west, east, up, down], take [item], use [item], hide, quit, attack[head, torso, limbs, ears]");
         } 
         else if (action.equalsIgnoreCase("go")) {
             player.move(argument);
@@ -71,6 +72,9 @@ public class GameManager {
         else if (action.equalsIgnoreCase("use")) {
             useItemFromInventory(argument);
         } 
+        else if (action.equalsIgnoreCase("attack")) {
+            handleAttack(argument);
+        }
         else if (action.equalsIgnoreCase("hide")) {
             player.hide();
         } 
@@ -82,6 +86,53 @@ public class GameManager {
         }
     }
 
+    private void handleAttack(String part) {
+        Room currentRoom = campus.getCurrentRoom();
+        List<Zombie> zombies = currentRoom.getZombies();
+
+        //check if there is zombie in the room
+        if (zombies.isEmpty()) {
+            System.out.println("There are no zombies here to attack!");
+            return;
+        }
+
+        Weapon equippedWeapon = player.getCurrentWeapon();
+        //the basic damage value
+        int finalDamage = 10;
+        String weaponName = "bare hands";
+
+        if (equippedWeapon != null){
+            finalDamage = equippedWeapon.getDamage();
+            weaponName = equippedWeapon.getName();
+            System.out.println(equippedWeapon.getUseFeedback());
+        }else{
+            System.out.println("You are not holding a weapon! You punch with your bare hands...");
+        }
+
+        Zombie target = zombies.get(0);
+
+        //attack zombies' ear when player use the broadcasting equipment
+        if (equippedWeapon != null && equippedWeapon.getName().equalsIgnoreCase("Broadcasting equipment")) {
+            System.out.println("The high-frequency noise targets the zombie's hearing!");
+            target.takeSpecificDamage(finalDamage, "ears"); 
+        } else {
+            //attack zombies based on player's instruction or randomly
+            System.out.println("Dealing damage to "+ target.getName() + "'s " + (part.isEmpty()? "body" : part) + "...");
+            if (part == null || part.isEmpty()){
+                target.takeRandomDamage(finalDamage);
+            } else {
+                target.takeSpecificDamage(finalDamage, part);
+            }
+        }
+
+        System.out.println(">> Damage dealt: " + finalDamage);
+        System.out.println(">> "+ target.getName()+"health remaining: "+target.getHealth());
+        
+        if(!target.isAlive()){
+            currentRoom.removeZombie(target);
+        }
+
+    }
    
     private void checkWinCondition() {
         // Get the current room name
@@ -115,7 +166,21 @@ public class GameManager {
             }
         }
         if (itemToUse != null) {
-            player.use(itemToUse);
+            int valueUsed = 0;
+            if (itemToUse instanceof Weapon){
+                Weapon w = (Weapon) itemToUse;
+                player.setCurrentWeapon(w);
+                valueUsed = w.getDamage();
+                System.out.println(itemToUse.getUseFeedback());
+                System.out.println(">> Weapon Damage: " + valueUsed);
+            }else if (itemToUse instanceof Consumable){
+                Consumable c = (Consumable) itemToUse;
+                valueUsed = c.getHealAmount();
+                player.use(itemToUse);
+                System.out.println(itemToUse.getUseFeedback());
+                System.out.println(">> Lifebar recovered: +" + valueUsed + " | Current Lifebar: " + player.getLifebar()) ;
+            }
+            
         } else {
             System.out.println("You don't have '" + itemName + "' in your inventory.");
         }
