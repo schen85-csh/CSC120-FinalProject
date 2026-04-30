@@ -133,13 +133,13 @@ public class BuildingStructure{
         //connect the rooms together
         //connect library with the peRoom
         if (library != null && peRoom != null) {
-            library.setExit("west", peRoom);
-            peRoom.setExit("east", library);
+            library.setExit("left", peRoom);
+            peRoom.setExit("right", library);
         }
         //connect library and storeroom
         if (library != null && storeroom != null) {
-            library.setExit("east", storeroom);
-            storeroom.setExit("west", library);
+            library.setExit("right", storeroom);
+            storeroom.setExit("left", library);
         }
         //connect storeroom with medical room
         //medical room is on the second floor and there is a stair connect storeroom with the medical room
@@ -149,14 +149,14 @@ public class BuildingStructure{
         }
         //connect broadcast room and dmedical room
         if (medicalRoom != null && broadcastRoom != null){
-            medicalRoom.setExit("west", broadcastRoom);
-            broadcastRoom.setExit("east", medicalRoom);
+            medicalRoom.setExit("left", broadcastRoom);
+            broadcastRoom.setExit("right", medicalRoom);
         }
 
         //connect broadcast room and science classroom
         if (broadcastRoom != null && scienceRoom != null){
-            broadcastRoom.setExit("west", scienceRoom);
-            scienceRoom.setExit("east", broadcastRoom);
+            broadcastRoom.setExit("left", scienceRoom);
+            scienceRoom.setExit("right", broadcastRoom);
         }
 
         //connect science class room and the roof

@@ -51,10 +51,10 @@ public class GameManager {
         // 2. 处理单单词指令
         if (line.equals("help")) {
             System.out.println("--- Available Commands ---");
-            System.out.println("Basic: go [direction], take [item], hide, quit");
-            System.out.println("Use: use [item] (for food/drinks)");
-            System.out.println("Attack: attack [part] (bare hands)");
-            System.out.println("Advanced: use [weapon] to attack [part]");
+            System.out.println("Basic: go [direction], take [item], hide, quit \n    for command go, players can enter up, down, left, right");
+            System.out.println("Use: use [item] \n    for food and drinks, like >> use energy drink");
+            System.out.println("Attack: attack [part] \n    players are allowed to use their bare hands to attack some parts(limbs, head, ears, torso) of the zombie. \n    If players did not give a target part, the system will pick a random part to attack.");
+            System.out.println("Advanced: use [weapon] to attack [part] \n    players can name the weapon they have and want to use. \n    players can also name the part(limbs, head, ears, torso) of the zombie that they want to attack.");
             return;
         } 
     
