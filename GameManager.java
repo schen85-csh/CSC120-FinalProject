@@ -92,7 +92,7 @@ public class GameManager {
 
         //check if there is zombie in the room
         if (zombies.isEmpty()) {
-            System.out.println("There are no zombies here to attack!");
+            System.out.println("You swing your weapon at the empty air. There are no zombies here!");
             return;
         }
 
@@ -127,9 +127,20 @@ public class GameManager {
 
         System.out.println(">> Damage dealt: " + finalDamage);
         System.out.println(">> "+ target.getName()+"health remaining: "+target.getHealth());
-        
-        if(!target.isAlive()){
+
+        if (target.isAlive()){
+            int zDamage = target.getAttackPower();
+            player.takeDamage(zDamage);
+
+            if(!player.isAlive()){
+                System.out.println("***********************************");
+                System.out.println("GAME OVER! You were eaten by zombies.");
+                System.out.println("***********************************");
+                this.isRunning = false;
+            }
+        }else{
             currentRoom.removeZombie(target);
+            System.out.println("The area is now safe... for now.");
         }
 
     }

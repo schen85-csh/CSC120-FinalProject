@@ -1,4 +1,4 @@
-Storeroom : hungry zombie : 60
-BroadcastRoom : music zombie : 80
-MedicalRoom : medical zombie : 80
-ScienceRoom : science zombie : 100
+Storeroom : hungry zombie : 60 : 5
+BroadcastRoom : music zombie : 80 : 5
+MedicalRoom : medical zombie : 80 : 5 
+ScienceRoom : science zombie : 100 : 10

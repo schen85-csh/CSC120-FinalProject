@@ -16,11 +16,34 @@ public class Player {
        this.inventory = new ArrayList<>();
     }
 
+    public void takeDamage(int amount){
+        this.lifebar -= amount;
+        if (this.lifebar < 0) {
+            this.lifebar = 0;
+        }
+        System.out.println("OHCH! The zombie attacks you ! You lost " + amount + "lifebar.");
+        System.out.println("Current Lifebar: " + this.lifebar);
+    }
+
+    public boolean isAlive(){
+        return this.lifebar > 0;
+    }
+
     public void move(String direction){
         boolean success = campus.movePlayer(direction);
         if(success){
+            Room currentRoom = campus.getCurrentRoom();
             System.out.println("You move " + direction + " successfully!" );
             System.out.println(campus.getCurrentRoom().getDescription());
+            List<Zombie> zombies = currentRoom.getZombies();
+            if(! zombies.isEmpty()){
+                System.out.println("\n[!] WARNING: You are not alone...");
+                for(Zombie z:zombies){
+                    System.out.println(">> A "+z.getName()+ " is wandering here!");
+                }
+            }else{
+                System.out.println("\nThe room seems quiet... for now.");
+            }
         }else{
             System.out.println("Oops! You cannot move " + direction);
         }

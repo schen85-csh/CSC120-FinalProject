@@ -101,15 +101,16 @@ public class BuildingStructure{
             if (line.isEmpty()) continue;
 
             String[] parts = line.split(":"); 
-            if (parts.length >= 3) {
+            if (parts.length >= 4) {
                 String roomName = parts[0].trim();
                 String zombieName = parts[1].trim();
                 int health = Integer.parseInt(parts[2].trim());
+                int attack = Integer.parseInt(parts[3].trim());
 
                 Room targetRoom = rooms.get(roomName);
                 if (targetRoom != null) {
                     
-                    targetRoom.addZombie(new Zombie(zombieName, health));
+                    targetRoom.addZombie(new Zombie(zombieName, health, attack));
                 }
             }
         }

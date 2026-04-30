@@ -5,10 +5,12 @@ import java.util.Random;
 public class Zombie {
     private String name;
     private int health;
+    private int attackPower;
     private Map<String, Double> bodyParts; 
-    public Zombie(String name, int health) {
+    public Zombie(String name, int health, int attackPower) {
         this.name = name;
         this.health = health;
+        this.attackPower = attackPower;
         this.bodyParts = new HashMap<>();
         
        
@@ -18,6 +20,9 @@ public class Zombie {
         bodyParts.put("ears", 1.5);   
     }
 
+    public int getAttackPower(){
+        return attackPower;
+    }
     
     public void takeSpecificDamage(int baseDamage, String part) {
         double multiplier = bodyParts.getOrDefault(part.toLowerCase(), 1.0);
