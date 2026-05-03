@@ -22,11 +22,11 @@ public class Room {
     public List<Item> getItems() {
         return this.items;
     }
-
+    
     public void setExit(String direction, Room neighbor){
         exits.put(direction, neighbor);
     }
-
+    
     public Room getExit(String direction){
         return exits.get(direction);
     }
@@ -34,7 +34,7 @@ public class Room {
     public void addItem(Item item){
         items.add(item);
     }
-
+    
     public Item removeItem(String itemName) {
         Item foundItem = null;
         for (Item i : items) {
@@ -50,15 +50,15 @@ public class Room {
         }
         return foundItem;
     }
-
+    
     public void addZombie(Zombie zombie) {
         this.zombies.add(zombie);
     }
-
+    
     public void removeZombie(Zombie zombie){
         this.zombies.remove(zombie);
     }
-
+    
     public List<Zombie> getZombies() {
         return this.zombies;
     }
@@ -66,7 +66,7 @@ public class Room {
     public String getDescription(){
         return "Location: " + "[" + name + "]" + "\n" + description; 
     }
-
+    
     public String getName(){
         return name;
     }

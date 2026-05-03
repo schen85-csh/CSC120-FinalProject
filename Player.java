@@ -52,7 +52,7 @@ public class Player {
             System.out.println("Oops! You cannot move " + direction);
         }
     }
-
+    
     /**
      * This mathod check if there's the item in the room and print information to tell player that if they successfully pick up the item.
      * if the player can pick the item, the item will be added into the inventory.
@@ -68,7 +68,7 @@ public class Player {
             System.out.println("There is no " + itemName + " here.");
         }
     }
-
+    
     /**
      * This method check if the item is consumable and then modify player's lifebar.
      * @param item
@@ -80,7 +80,7 @@ public class Player {
             inventory.remove(item);
         }
     }
-
+    
     /**
      * This method check the current room to see if there's somewhere to hide and prints information to tell player if they hide successfully.
      */
