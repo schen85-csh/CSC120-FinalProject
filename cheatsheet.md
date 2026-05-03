@@ -13,7 +13,7 @@ all commands:
          
          
          
-         
+MY ARCHUTECTURE DIAGRAM AND MAP ARE INCLUDED IN THE FOLDER IN pdf VERSION!!   
 
 # SPOILER ALERT
 
